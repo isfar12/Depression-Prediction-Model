@@ -6,10 +6,10 @@ from tensorflow.keras.models import load_model
 import pandas as pd
 import os
 # Load models and data
-rf_model = joblib.load('models/rf_model.pkl')  # Random Forest
-svm_model = joblib.load('models/svm_model.pkl')  # SVM
-ydf_model = ydf.load_model('models/ydf_model')  # YDF
-ann_model = load_model("models/ann_best_model.keras")
+# rf_model = joblib.load('models/rf_model.pkl')  # Random Forest
+# svm_model = joblib.load('models/svm_model.pkl')  # SVM
+# ydf_model = ydf.load_model('models/ydf_model')  # YDF
+# ann_model = load_model("models/ann_best_model.keras")
 X = joblib.load("X_columns.pkl")  # Feature columns
 
 # Prediction function
@@ -65,14 +65,28 @@ def index():
         Financial = float(request.form['financial'])
         History = int(request.form['history'])
         Subject = request.form['subject']
+        model_choice = request.form['model_choice']
 
-        ann_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, ann_model)
-        rf_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, rf_model)
-        svm_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, svm_model)
+        if model_choice == 'ann':
+            ann_model = load_model("models/ann_best_model.keras")
+            ann_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, ann_model)
 
-        ydf_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, ydf_model)
+            return render_template('index.html', ann_pred=ann_pred)
 
-        return render_template('index.html', ann_pred=ann_pred, rf_pred=rf_pred, svm_pred=svm_pred, ydf_pred=ydf_pred)
+        elif model_choice == 'rf':
+            rf_model = joblib.load('models/rf_model.pkl')  # Load Random Forest model
+            rf_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, rf_model)
+            return render_template('index.html', rf_pred=rf_pred)
+
+        elif model_choice == 'svm':
+            svm_model = joblib.load('models/svm_model.pkl')  # Load SVM model
+            svm_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, svm_model)
+            return render_template('index.html', svm_pred=svm_pred)
+
+        elif model_choice == 'ydf':
+            ydf_model = ydf.load_model('models/ydf_model')  # Load YDF model
+            ydf_pred = prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Suicide, Study, Financial, History, Subject, ydf_model)
+            return render_template('index.html', ydf_pred=ydf_pred)
 
     return render_template('index.html')
 

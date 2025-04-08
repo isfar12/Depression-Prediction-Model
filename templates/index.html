@@ -143,6 +143,15 @@
                             <option value="3">More than 8 hours</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="model_choice">Select Model for Prediction</label>
+                        <select id="model_choice" name="model_choice" class="form-select" required>
+                            <option value="ann">(ANN) Deep Learning</option>
+                            <option value="rf">Random Forest</option>
+                            <option value="svm">SVM</option>
+                            <option value="ydf">YDF</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="col-md-6">
@@ -220,49 +229,63 @@
             </div>
         </form>
 
-{% if ann_pred is defined %}
-<div class="result-container">
-    <h3 class="text-center mb-4">Prediction Results</h3>
-    <div class="row g-4">
-        <!-- ANN Prediction -->
-        <div class="col-md-6">
-            <div class="result-item">
-                <h5>ANN Prediction</h5>
-                <p class="prediction-text {% if ann_pred[0][0] > 0.5 %}depressed{% else %}not-depressed{% endif %}">
-                    {% if ann_pred[0][0] > 0.5 %}Depressed{% else %}Not Depressed{% endif %}
-                </p>
+        {% if ann_pred is defined %}
+        <div class="result-container">
+            <h3 class="text-center mb-4">ANN Prediction Results</h3>
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="result-item">
+                        <h5>ANN Prediction</h5>
+                        <p class="prediction-text {% if ann_pred[0][0] > 0.5 %}depressed{% else %}not-depressed{% endif %}">
+                            {% if ann_pred[0][0] > 0.5 %}Depressed{% else %}Not Depressed{% endif %}
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Random Forest Prediction -->
-        <div class="col-md-6">
-            <div class="result-item">
-                <h5>Random Forest</h5>
-                <p class="prediction-text {% if rf_pred == 1 %}depressed{% else %}not-depressed{% endif %}">
-                    {% if rf_pred == 1 %}Depressed{% else %}Not Depressed{% endif %}
-                </p>
+        {% elif rf_pred is defined %}
+        <div class="result-container">
+            <h3 class="text-center mb-4">Random Forest Prediction Results</h3>
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="result-item">
+                        <h5>Random Forest Prediction</h5>
+                        <p class="prediction-text {% if rf_pred == 1 %}depressed{% else %}not-depressed{% endif %}">
+                            {% if rf_pred == 1 %}Depressed{% else %}Not Depressed{% endif %}
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- SVM Prediction -->
-        <div class="col-md-6">
-            <div class="result-item">
-                <h5>SVM Prediction</h5>
-                <p class="prediction-text {% if svm_pred == 1 %}depressed{% else %}not-depressed{% endif %}">
-                    {% if svm_pred == 1 %}Depressed{% else %}Not Depressed{% endif %}
-                </p>
+        {% elif svm_pred is defined %}
+        <div class="result-container">
+            <h3 class="text-center mb-4">SVM Prediction Results</h3>
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="result-item">
+                        <h5>SVM Prediction</h5>
+                        <p class="prediction-text {% if svm_pred == 1 %}depressed{% else %}not-depressed{% endif %}">
+                            {% if svm_pred == 1 %}Depressed{% else %}Not Depressed{% endif %}
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- YDF Prediction -->
-        <div class="col-md-6">
-            <div class="result-item">
-                <h5>YDF Prediction</h5>
-                <p class="prediction-text {% if ydf_pred[0] > 0.5 %}depressed{% else %}not-depressed{% endif %}">
-                    {% if ydf_pred[0] > 0.5 %}Depressed{% else %}Not Depressed{% endif %}
-                </p>
+        {% elif ydf_pred is defined %}
+        <div class="result-container">
+            <h3 class="text-center mb-4">YDF Prediction Results</h3>
+            <div class="row g-4">
+                <div class="col-md-12">
+                    <div class="result-item">
+                        <h5>YDF Prediction</h5>
+                        <p class="prediction-text {% if ydf_pred[0] > 0.5 %}depressed{% else %}not-depressed{% endif %}">
+                            {% if ydf_pred[0] > 0.5 %}Depressed{% else %}Not Depressed{% endif %}
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-{% endif %}
+        {% endif %}        
 
         <div class="result-container">
             <h3 class="text-center">Key Contributing Factors</h3>
@@ -286,38 +309,93 @@
         <div class="model-introduction mt-5">
             <h3 class="text-center mb-4">Model Introductions</h3>
             <div class="row g-4">
-                <div class="col-md-6">
+                <!-- ANN -->
+                <div class="col-md-4">
                     <div class="model-card shadow-sm">
                         <h5>🤖 Artificial Neural Network (ANN)</h5>
                         <p>Mimics the brain to detect patterns in complex, non-linear data.</p>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- Random Forest -->
+                <div class="col-md-4">
                     <div class="model-card shadow-sm">
                         <h5>🌳 Random Forest</h5>
                         <p>Ensemble of decision trees. Robust and stable for most classification tasks.</p>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- SVM -->
+                <div class="col-md-4">
                     <div class="model-card shadow-sm">
                         <h5>📏 Support Vector Machine (SVM)</h5>
                         <p>Classifies data by finding the optimal boundary. Effective in high dimensions.</p>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- XGBoost -->
+                <div class="col-md-4">
                     <div class="model-card shadow-sm">
                         <h5>⚡ XGBoost</h5>
                         <p>Highly efficient gradient boosting model. Excels in speed and accuracy.</p>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <!-- YDF -->
+                <div class="col-md-4">
                     <div class="model-card shadow-sm">
                         <h5>🌲 Yggdrasil Decision Forest (YDF)</h5>
                         <p>Google's modern forest framework, succeeding TensorFlow Decision Forests.</p>
                     </div>
                 </div>
+                <!-- Logistic Regression -->
+                <div class="col-md-4">
+                    <div class="model-card shadow-sm">
+                        <h5>🧠 Logistic Regression</h5>
+                        <p>Simple yet powerful model for binary classification using a sigmoid function.</p>
+                    </div>
+                </div>
+                <!-- Naive Bayes -->
+                <div class="col-md-4">
+                    <div class="model-card shadow-sm">
+                        <h5>🕸️ Naive Bayes</h5>
+                        <p>A fast and efficient probabilistic model based on Bayes’ theorem. Great for text data.</p>
+                    </div>
+                </div>
+                <!-- KNN -->
+                <div class="col-md-4">
+                    <div class="model-card shadow-sm">
+                        <h5>📍 K-Nearest Neighbors (KNN)</h5>
+                        <p>Classifies data based on the most similar neighbors. No training phase needed.</p>
+                    </div>
+                </div>
+                <!-- Decision Tree -->
+                <div class="col-md-4">
+                    <div class="model-card shadow-sm">
+                        <h5>🌿 Decision Tree</h5>
+                        <p>Splits data into branches based on conditions. Intuitive and easy to visualize.</p>
+                    </div>
+                </div>
+                <!-- LightGBM -->
+                <div class="col-md-4">
+                    <div class="model-card shadow-sm">
+                        <h5>💡 LightGBM</h5>
+                        <p>Fast, gradient boosting model optimized for performance on large datasets.</p>
+                    </div>
+                </div>
+                <!-- CatBoost -->
+                <div class="col-md-4">
+                    <div class="model-card shadow-sm">
+                        <h5>🐱 CatBoost</h5>
+                        <p>Boosting algorithm by Yandex. Works great with categorical features out-of-the-box.</p>
+                    </div>
+                </div>
+                <!-- Extra Trees -->
+                <div class="col-md-4">
+                    <div class="model-card shadow-sm">
+                        <h5>🌌 Extra Trees</h5>
+                        <p>An ensemble of extremely randomized trees. Good for variance reduction and speed.</p>
+                    </div>
+                </div>
             </div>
         </div>
+        
         
     <div class="footer">
         <p>&copy; 2025 Depression Prediction Tool. All Rights Reserved.</p>
