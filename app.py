@@ -50,6 +50,10 @@ def prediction_ml(Gender, Age, Pressure, CGPA, Satisfaction, Sleep, Dietary, Sui
 
 app = Flask(__name__)
 
+
+app.config["DEBUG"] = False
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
