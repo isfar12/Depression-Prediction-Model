@@ -6,6 +6,7 @@ import keras
 import ydf
 from tensorflow.keras.models import load_model
 import pandas as pd
+import os
 # Load models and data
 rf_model = joblib.load('models/rf_model.pkl')  # Random Forest
 svm_model = joblib.load('models/svm_model.pkl')  # SVM
@@ -76,4 +77,4 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run()# 
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
